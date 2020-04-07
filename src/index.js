@@ -1,7 +1,13 @@
+// dotenv recommends to start the process as soon as possible
+
+import "./helpers/dotenv";
+
 import express from "express";
 
 const app = express();
-const port = 3000;
+// All environment variables are always to be strings
+//      We must do "parseInt", to parse the output
+const port = parseInt(process.env.PORT);
 
 // doing request to the root only
 // not to any other places
