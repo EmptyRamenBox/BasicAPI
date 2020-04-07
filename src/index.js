@@ -7,6 +7,10 @@ import cors from "cors";
 import helmet from "helmet";
 import pino from "express-pino-logger";
 
+// Error Handler
+import { notFound, errorHandler } from "./helpers/errors";
+import { anonOperationNotAloneMessage } from "graphql/validation/rules/LoneAnonymousOperation";
+
 const app = express();
 // All environment variables are always to be strings
 //      We must do "parseInt", to parse the output
@@ -19,11 +23,12 @@ app.use(helmet());
 app.use(pino());
 app.use(express.json()); // Allow express to use JSON in the body
 
-// doing request to the root only
-// not to any other places
-app.get("/", (req, res) => {
-  res.json({ msg: "Hello There" });
+// GET Request/Response
+app.use("/", (req, res) => {
+  res.json({ msg: "Hello There", type: req.method });
 });
+app.use(notFound); // NotFound handler
+app.use(errorHandler); // Error handler
 app.listen(port);
 
 // The API that respondes with "Hello There" is ready
